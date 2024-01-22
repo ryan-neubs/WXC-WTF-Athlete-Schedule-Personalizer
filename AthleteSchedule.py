@@ -3,11 +3,13 @@ class AthleteSchedule():
 
     def __init__(self, data):
 
-        self.name = data[0]
+        self.name = str(data[0].split(", ")[1]) + " " + str(data[0].split(", ")[0]) 
         self.mileage = data[2:9]
         self.fms = data[1]
         self.notes = data[-1]
         self.data = data
+        self.tue_workout = None
+        self.fri_workout = None
 
     def get_name(self):
         return self.name
@@ -19,4 +21,4 @@ class AthleteSchedule():
         return self.notes
     
     def get_days_mileage(self, day):
-        return self.mileage[self.dow_index[day]]
+        return self.mileage[day]
