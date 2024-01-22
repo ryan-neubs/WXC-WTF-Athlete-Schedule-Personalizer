@@ -1,9 +1,3 @@
-import os
-import pandas as pd
-
-os.chdir('./MileageSheets')
-
-mileage = pd.read_excel('1-22-2024-Mileage.xlsx')
 
 class AthleteSchedule():
 
@@ -26,9 +20,3 @@ class AthleteSchedule():
     
     def get_days_mileage(self, day):
         return self.mileage[self.dow_index[day]]
-
-athletes = []
-for row in mileage.values.tolist():
-    if "double core" in row[0] or "/" in row[0]:
-        continue
-    athletes.append(AthleteSchedule(row))
