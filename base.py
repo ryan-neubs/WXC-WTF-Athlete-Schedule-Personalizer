@@ -29,5 +29,13 @@ def mileage():
 def show_athlete(athlete):
     dow = datetime.today().weekday()
     schedule = athletes[athlete]
-    return render_template(TEMPLATES[dow])
+    return render_template(
+        TEMPLATES[dow], 
+        athletename=schedule.get_name(), 
+        mileage=schedule.get_days_mileage(dow),
+        fms=schedule.get_fms(),
+        notes=schedule.get_notes(),
+        total_miles=schedule.get_total_miles(),
+        core=schedule.get_core(dow)
+        )
 
