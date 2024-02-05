@@ -4,6 +4,13 @@ from AthleteSchedule import AthleteSchedule
 
 app = Flask(__name__)
 
+data = scrape_mileage_sheet("1-22-2024-Mileage.xlsx")
+athletes = {}
+for row in data:
+    if row[1] == 'FMS' or type(row[2]) == float:
+        continue
+    athletes[row[0]] = AthleteSchedule(row)
+
 @app.route("/")
 def hello_world():
     return "<p>This is the index page!</p>"
