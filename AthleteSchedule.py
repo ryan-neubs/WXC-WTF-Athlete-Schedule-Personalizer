@@ -11,6 +11,9 @@ class AthleteSchedule():
         self.tue_workout = None
         self.fri_workout = None
 
+    def __call__(self):
+        return self.mileage
+
     def get_name(self):
         return self.name
     

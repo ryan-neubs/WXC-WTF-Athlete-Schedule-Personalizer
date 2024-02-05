@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, render_template
 from excelsheetscraper import scrape_mileage_sheet
 from AthleteSchedule import AthleteSchedule
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -10,6 +11,8 @@ for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
         continue
     athletes[row[0]] = AthleteSchedule(row)
+
+TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
 @app.route("/")
 def hello_world():
@@ -24,8 +27,7 @@ def mileage():
 
 @app.route("/mileage/<athlete>")
 def show_athlete(athlete):
-    mileage = scrape_mileage_sheet('1-22-2024-Mileage.xlsx')
-    for row in mileage:
-        if athlete in row[0]:
-            return f"<p>{row}</p>"
-    return "<p>Athlete not found</p>"
+    dow = datetime.today().weekday()
+    schedule = athletes[athlete]
+    return render_template(TEMPLATES[dow])
+
