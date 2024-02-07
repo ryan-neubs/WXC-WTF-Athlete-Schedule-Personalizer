@@ -1,1 +1,22 @@
-<h>BOOYAH</h>
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <title>
+        Sunday Mileage for: {{ athletename }}
+    </title>
+    <body>
+        <h1>Sunday Mileage for: {{ athletename }}</h1>
+        <p>Mileage: {{ mileage }}</p>
+        <p>FMS Group: {{ fms }}</p>
+        <p>Notes: {{ notes }}</p>
+        <p>Total Mileage: {{ total_miles }}</p>
+        <p>Today's Core: 
+            <ul>
+                {% for thing in core %}
+                  <li>{{ thing }}</li>
+                {% endfor %}  
+            </ul>
+        </p>
+    </body>
+</html>

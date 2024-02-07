@@ -13,6 +13,7 @@ for row in data:
     athletes[row[0]] = AthleteSchedule(row)
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
+DOW = 6 #datetime.today().weekday()
 
 @app.route("/")
 def hello_world():
@@ -27,15 +28,14 @@ def mileage():
 
 @app.route("/mileage/<athlete>")
 def show_athlete(athlete):
-    dow = datetime.today().weekday()
     schedule = athletes[athlete]
     return render_template(
-        TEMPLATES[dow], 
+        TEMPLATES[DOW], 
         athletename=schedule.get_name(), 
-        mileage=schedule.get_days_mileage(dow),
+        mileage=schedule.get_days_mileage(DOW),
         fms=schedule.get_fms(),
         notes=schedule.get_notes(),
         total_miles=schedule.get_total_miles(),
-        core=schedule.get_core(dow)
+        core=schedule.get_core(DOW)
         )
 

@@ -1,4 +1,4 @@
-
+import pandas
 class AthleteSchedule():
 
     CORE = {
@@ -16,7 +16,11 @@ class AthleteSchedule():
         self.name = str(data[0].split(", ")[1]) + " " + str(data[0].split(", ")[0]) 
         self.mileage = data[2:9]
         self.fms = data[1]
+        if pandas.isna(self.fms):
+            self.fms = 'None'
         self.notes = data[-1]
+        if pandas.isna(self.notes):
+            self.notes = 'None'
         self.data = data
         self.tue_workout = None
         self.fri_workout = None
