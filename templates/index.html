@@ -4,10 +4,12 @@
     </head>
     <body>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
         <div class="searchbox">
-            <input type="text" placeholder="Athlete Name: Last, First">
-            <button class="btn"><i class="search">Go</i></button>
+            <form action="/search" method="post">
+                <input type="text" id="name" name="name" placeholder="Athlete Name: Last, First" required>
+                <button class="btn" type="submit"><i class="search">Search</i></button>
+            </form>
         </div>
     </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from excelsheetscraper import scrape_mileage_sheet
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
@@ -13,11 +13,11 @@ for row in data:
     athletes[row[0]] = AthleteSchedule(row)
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
-DOW = 6 #datetime.today().weekday()
+DOW = datetime.today().weekday()
 
 @app.route("/")
-def hello_world():
-    return "<p>This is the index page!</p>"
+def home():
+    return render_template("index.html")
 
 @app.route("/mileage")
 def mileage():
@@ -26,16 +26,19 @@ def mileage():
     {mileage}
     """
 
-@app.route("/mileage/<athlete>")
-def show_athlete(athlete):
-    schedule = athletes[athlete]
-    return render_template(
-        TEMPLATES[DOW], 
-        athletename=schedule.get_name(), 
-        mileage=schedule.get_days_mileage(DOW),
-        fms=schedule.get_fms(),
-        notes=schedule.get_notes(),
-        total_miles=schedule.get_total_miles(),
-        core=schedule.get_core(DOW)
-        )
+@app.route("/search", methods=['POST'])
+def show_athlete():
+    if request.method == 'POST':
+        athlete = request.form['name']
+        print(athlete)
+        schedule = athletes[athlete]
+        return render_template(
+            TEMPLATES[DOW], 
+            athletename=schedule.get_name(), 
+            mileage=schedule.get_days_mileage(DOW),
+            fms=schedule.get_fms(),
+            notes=schedule.get_notes(),
+            total_miles=schedule.get_total_miles(),
+            core=schedule.get_core(DOW)
+            )
 
