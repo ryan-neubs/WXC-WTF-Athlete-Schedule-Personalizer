@@ -1,4 +1,5 @@
 import pandas
+from workout import Workout
 class AthleteSchedule():
 
     CORE = {
@@ -22,8 +23,10 @@ class AthleteSchedule():
         if pandas.isna(self.notes):
             self.notes = 'None'
         self.data = data
-        self.tue_workout = None
-        self.fri_workout = None
+        if self.mileage[1] == 'WO':
+            self.tue_workout = True
+        if self.mileage[4] == 'WO':
+            self.fri_workout = True
         self.total_miles = data[9]
 
     def __call__(self):

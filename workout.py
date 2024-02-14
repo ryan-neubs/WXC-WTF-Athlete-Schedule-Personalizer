@@ -1,8 +1,31 @@
 from math import isnan
 import pandas as pd
+from excelsheetscraper import scrape_workout_sheet
 
-wo = pd.read_excel("test.xlsx")
-rows = wo.values.tolist()
-for row in rows:
-    if type(row[-1]) == str:
-        print(row[-1])
+class Workout:
+
+    def __init__(self, data):
+        # These variables are all time estimates to calculate paces
+        PERCENT = 0.58
+        self.fivek = data[1]
+        self.mile = data[2]
+        self.threek = data[3]
+        self.R = data[5]
+        self.VO2 = data[6]
+        self.I = data[7]
+        self.tenk = data[8]
+        self.CV = data[9]
+        self.thresh = data[10]
+        self.threshlow = data[11]
+        # End of calculation constants
+
+        self.athlete = data[0]
+        self.group = data[-2]
+        # self.workout = workouts[data[-2]] Inconsistency in excel form, need to think of different solution
+    
+    def get_group(self):
+        return self.group
+    
+    def get_athlete(self):
+        return self.athlete
+    
