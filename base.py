@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for
-from excelsheetscraper import scrape_mileage_sheet
+from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
 import pandas as pd
@@ -13,7 +13,7 @@ for row in data:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
-workoutdata = str(pd.read_excel('static/WorkoutSheets/test.xlsx').to_html())
+workoutdata = scrape_workout_sheet('test.xlsx')
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
@@ -36,8 +36,8 @@ def show_athlete():
         print(athlete)
         schedule = athletes[athlete]
         return render_template(
-            TEMPLATES[DOW], 
-            athletename=schedule.get_name(), 
+            TEMPLATES[1], 
+            athletename=schedule.get_name(),
             mileage=schedule.get_days_mileage(DOW),
             fms=schedule.get_fms(),
             notes=schedule.get_notes(),

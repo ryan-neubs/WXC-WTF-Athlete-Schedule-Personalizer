@@ -13,7 +13,7 @@ def scrape_workout_sheet(sheet):
     os.chdir("./static/WorkoutSheets/")
     workout = pd.read_excel(sheet)
     workout = workout.astype(str)
-    os.chdir("..")
+    os.chdir("../..")
     data = workout.values.tolist()
     colnames = [row for row in workout]
     colname = colnames[0]
@@ -22,6 +22,9 @@ def scrape_workout_sheet(sheet):
             row[0] = colname
     data.insert(0, colnames)
     data[0][0] = colname
+    for row in data:
+        if (row[0] == colname and row[12] == 'nan') or row[-2] == 'nan':
+            data.remove(row)
     return data
 
 def get_workouts(sheet):
