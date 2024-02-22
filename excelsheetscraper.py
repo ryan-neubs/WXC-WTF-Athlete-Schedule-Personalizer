@@ -10,12 +10,20 @@ def scrape_mileage_sheet(sheet):
 
 def scrape_workout_sheet(sheet):
     workouts = {}
-    os.chdir("./WorkoutSheets/")
+    os.chdir("./static/WorkoutSheets/")
     workout = pd.read_excel(sheet)
     workout = workout.astype(str)
     os.chdir("..")
     data = workout.values.tolist()
-    
+    colnames = [row for row in workout]
+    colname = colnames[0]
+    for row in data:
+        if row[0] == 'nan':
+            row[0] = colname
+    data.insert(0, colnames)
+    data[0][0] = colname
+    return data
+
 def get_workouts(sheet):
     workouts = {}
     wo = pd.read_excel(sheet)
@@ -24,3 +32,6 @@ def get_workouts(sheet):
         if type(row[-1]) == str:
             workouts[row[-1].split(':')[0]] = row[-1].split(':')[1]
     return workouts
+
+
+    
