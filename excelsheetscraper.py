@@ -9,7 +9,7 @@ def scrape_mileage_sheet(sheet):
     return mileage.values.tolist()
 
 def scrape_workout_sheet(sheet):
-    workouts = {}
+    subtables = []
     os.chdir("./static/WorkoutSheets/")
     workout = pd.read_excel(sheet)
     workout = workout.astype(str)
@@ -25,7 +25,18 @@ def scrape_workout_sheet(sheet):
     for row in data:
         if (row[0] == colname and row[12] == 'nan') or row[-2] == 'nan':
             data.remove(row)
-    return data
+    labellocs = []
+    rowloc = 0
+    for row in data:
+        if row[0] == colname and (row[1] != 'nan' or row[12] != 'nan'):
+            labellocs.append(rowloc)
+        rowloc += 1
+    for index in range(len(labellocs)):
+        if index + 1 == len(labellocs):
+            subtables.append(data[labellocs[index]:])
+        else:
+            subtables.append(data[labellocs[index]:labellocs[index+1]])
+    return subtables
 
 def get_workouts(sheet):
     workouts = {}
