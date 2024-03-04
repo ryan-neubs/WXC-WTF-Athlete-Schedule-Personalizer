@@ -18,7 +18,15 @@ class Workout:
         self.thresh = data[10]
         self.threshlow = data[11]
         # End of calculation constants
-
+        def get_splits(data):
+            splits = []
+            for split in data[11:]:
+                if split == 'nan':
+                    break
+                splits.append(split)
+            return splits
+        
+        self.splits = get_splits(data)
         self.athlete = data[0]
         self.group = data[-2]
         # self.workout = workouts[data[-2]] Inconsistency in excel form, need to think of different solution
@@ -28,4 +36,8 @@ class Workout:
     
     def get_athlete(self):
         return self.athlete
+    
+    def get_splits(self):
+        return self.splits
+    
     

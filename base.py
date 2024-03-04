@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, url_for, redirect
-from excelsheetscraper import scrape_mileage_sheet
+from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -12,8 +13,9 @@ for row in data:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
+workoutdata = scrape_workout_sheet('test.xlsx')
+
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
-DOW = datetime.today().weekday()
 
 def fixName(name):
     brokenName = name.split()
@@ -47,16 +49,18 @@ def weekday(athleteName, dow):
 
 @app.route("/search", methods=['POST'])
 def show_athlete():
+    DOW = datetime.today().weekday()
     if request.method == 'POST':
         athlete = request.form['name']
         print(athlete)
         schedule = athletes[athlete]
         return render_template(
-            TEMPLATES[DOW], 
-            athletename=schedule.get_name(), 
+            TEMPLATES[1], 
+            athletename=schedule.get_name(),
             mileage=schedule.get_days_mileage(DOW),
             fms=schedule.get_fms(),
             notes=schedule.get_notes(),
             total_miles=schedule.get_total_miles(),
-            core=schedule.get_core(DOW)
+            core=schedule.get_core(DOW),
+            workoutsheet=workoutdata
             )
