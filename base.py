@@ -44,7 +44,8 @@ def weekday(athleteName, dow):
         fms=schedule.get_fms(),
         notes=schedule.get_notes(),
         total_miles=schedule.get_total_miles(),
-        core=schedule.get_core(dow)
+        core=schedule.get_core(dow),
+            workoutsheet=workoutdata
         )
 
 @app.route("/search", methods=['POST'])
@@ -55,7 +56,7 @@ def show_athlete():
         print(athlete)
         schedule = athletes[athlete]
         return render_template(
-            TEMPLATES[1], 
+            TEMPLATES[DOW], 
             athletename=schedule.get_name(),
             mileage=schedule.get_days_mileage(DOW),
             fms=schedule.get_fms(),

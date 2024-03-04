@@ -4,8 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Sheet</title>
+    <style>
+        body {margin:0;}
+        /* Style the top navigation bar */
+    .topnav {
+        overflow: hidden;
+        background-color: orange;
+    }
+
+    /* Style the topnav links */
+    .topnav a {
+        float: left;
+        border-right:1px solid #bbb;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    .topnav a:last-child {
+        border-right: none;
+    }
+
+    /* Change color on hover */
+    .topnav a:hover:not(.active) {
+        background-color: coral;
+    /* color: black; */
+    }
+    .active {
+        background-color: grey;
+        color: white;
+        }
+    </style>
 </head>
 <body>
+    <div class="topnav">
+        <a href="/{{athletename}}/0">Monday</a>
+        <a class="active"href="#home">Tuesday</a>
+        <a href="/{{athletename}}/2">Wednesday</a>
+        <a href="/{{athletename}}/3">Thursday</a>
+        <a href="/{{athletename}}/4">Friday</a>
+        <a href="/{{athletename}}/5">Saturday</a>
+        <a href="/{{athletename}}/6">Sunday</a>
+      </div>
+
+      <div style="padding:20px;margin-top:1px;height:1500px;">
+      <h1>Tuesday Workout for: {{ athletename }}</h1>
     {{ workoutsheet | safe}}
 </body>
 </html>
