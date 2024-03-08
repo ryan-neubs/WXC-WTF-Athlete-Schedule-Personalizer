@@ -6,22 +6,29 @@ import pandas as pd
 
 app = Flask(__name__)
 
-data = scrape_mileage_sheet("1-22-2024-Mileage.xlsx")
+data = scrape_mileage_sheet("Mileage.xlsx", '1-15')
 athletes = {}
 for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
-workoutdata = scrape_workout_sheet('test.xlsx')
+workoutdata = scrape_workout_sheet('Workouts.xlsx', '3-5')
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
-def fixName(name):
+def switchNameOrder(name):
     brokenName = name.split()
     firstName = brokenName[0]
     lastName = brokenName[1]
     return lastName + ', ' + firstName
+
+def selectAthleteWO(name):
+    for row in workoutdata:
+        for athlete in row:
+            if athlete[0] == name:
+                return [x for x in [row[0][0]]+row[0][12:-1] if x != 'nan'], [x for x in [athlete[0]]+athlete[12:-1] if x != 'nan']
+    return False
 
 @app.route("/")
 def home():
@@ -35,8 +42,8 @@ def mileage():
     """
 @app.route("/<athleteName>/<int:dow>")
 def weekday(athleteName, dow):
-    new_name = fixName(athleteName)
-    schedule = athletes[new_name]
+    name = switchNameOrder(athleteName)
+    schedule = athletes[name]
     return render_template(
         TEMPLATES[dow], 
         athletename=schedule.get_name(), 
@@ -45,7 +52,7 @@ def weekday(athleteName, dow):
         notes=schedule.get_notes(),
         total_miles=schedule.get_total_miles(),
         core=schedule.get_core(dow),
-            workoutsheet=workoutdata
+            workoutsheet=selectAthleteWO(name)
         )
 
 @app.route("/search", methods=['POST'])
@@ -53,7 +60,6 @@ def show_athlete():
     DOW = datetime.today().weekday()
     if request.method == 'POST':
         athlete = request.form['name']
-        print(athlete)
         schedule = athletes[athlete]
         return render_template(
             TEMPLATES[DOW], 
@@ -63,5 +69,5 @@ def show_athlete():
             notes=schedule.get_notes(),
             total_miles=schedule.get_total_miles(),
             core=schedule.get_core(DOW),
-            workoutsheet=workoutdata
+            workoutsheet=selectAthleteWO(athlete)
             )

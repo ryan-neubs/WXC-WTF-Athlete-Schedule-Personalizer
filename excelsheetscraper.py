@@ -2,16 +2,18 @@ import os
 import pandas as pd
 
 
-def scrape_mileage_sheet(sheet):
+def scrape_mileage_sheet(sheet, week):
     os.chdir("./MileageSheets/")
-    mileage = pd.read_excel(sheet)
+    mileagesheets = pd.ExcelFile(sheet)
+    mileage = pd.read_excel(mileagesheets, week)
     os.chdir("..")
     return mileage.values.tolist()
 
-def scrape_workout_sheet(sheet):
+def scrape_workout_sheet(sheet, week):
     subtables = []
     os.chdir("./static/WorkoutSheets/")
-    workout = pd.read_excel(sheet)
+    workoutsheets = pd.ExcelFile(sheet)
+    workout = pd.read_excel(workoutsheets, week)
     workout = workout.astype(str)
     os.chdir("../..")
     data = workout.values.tolist()
