@@ -3,17 +3,38 @@ from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
 import pandas as pd
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-data = scrape_mileage_sheet("Mileage.xlsx", '1-15')
+def get_current_week_dates():
+    # Get the current date
+    current_date = datetime.now()
+
+    # Find the first Monday of the current week
+    monday_date = current_date - timedelta(days=current_date.weekday())
+
+    # Calculate the dates for Monday, Tuesday, and Friday of the current week
+    tuesday_date = monday_date + timedelta(days=1)
+    friday_date = monday_date + timedelta(days=4)
+
+    # Format the dates as "M-D" (Month-Day)
+    formatted_monday = monday_date.strftime("%#m-%#d")
+    formatted_tuesday = tuesday_date.strftime("%#m-%#d")
+    formatted_friday = friday_date.strftime("%#m-%#d")
+    # Note: The format string has to use '#' on Windows. On other platforms it needs a hyphen '-'
+    # I will look more into this if it causes any issues
+
+    return formatted_monday, formatted_tuesday, formatted_friday
+
+data = scrape_mileage_sheet("Mileage.xlsx", get_current_week_dates()[0])
 athletes = {}
 for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
-workoutdata = scrape_workout_sheet('Workouts.xlsx', '3-5')
+workoutdata = scrape_workout_sheet('Workouts.xlsx', get_current_week_dates()[1])
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
@@ -36,7 +57,7 @@ def home():
 
 @app.route("/mileage")
 def mileage():
-    mileage = scrape_mileage_sheet('1-22-2024-Mileage.xlsx')
+    mileage = scrape_mileage_sheet('Mileage.xlsx', get_current_week_dates()[0])
     return f"""<p>This page shows milage!</p>
     {mileage}
     """
