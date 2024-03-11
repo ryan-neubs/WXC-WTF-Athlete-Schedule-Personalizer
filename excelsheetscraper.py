@@ -2,17 +2,17 @@ import os
 import pandas as pd
 
 
-def scrape_mileage_sheet(sheet, week):
+def scrape_mileage_sheet(week):
     os.chdir("./MileageSheets/")
-    mileagesheets = pd.ExcelFile(sheet)
+    mileagesheets = pd.ExcelFile("Mileage.xlsx")
     mileage = pd.read_excel(mileagesheets, week)
     os.chdir("..")
     return mileage.values.tolist()
 
-def scrape_workout_sheet(sheet, week):
+def scrape_workout_sheet(week):
     subtables = []
     os.chdir("./static/WorkoutSheets/")
-    workoutsheets = pd.ExcelFile(sheet)
+    workoutsheets = pd.ExcelFile("Workouts.xlsx")
     workout = pd.read_excel(workoutsheets, week)
     workout = workout.astype(str)
     os.chdir("../..")
@@ -40,9 +40,12 @@ def scrape_workout_sheet(sheet, week):
             subtables.append(data[labellocs[index]:labellocs[index+1]])
     return subtables
 
-def get_workouts(sheet):
+def get_workouts(week):
     workouts = {}
-    wo = pd.read_excel(sheet)
+    os.chdir("./static/WorkoutSheets/")
+    wosheet = pd.ExcelFile("Workouts.xlsx")
+    wo = pd.read_excel(wosheet, week)
+    os.chdir("../..")
     rows = wo.values.tolist()
     for row in rows:
         if type(row[-1]) == str:

@@ -36,6 +36,9 @@
         background-color: grey;
         color: white;
         }
+    table, th, td {
+        border:1px solid black;
+    }
     </style>
 </head>
 <body>
@@ -47,10 +50,22 @@
         <a href="/{{athletename}}/4">Friday</a>
         <a href="/{{athletename}}/5">Saturday</a>
         <a href="/{{athletename}}/6">Sunday</a>
-      </div>
+    </div>
 
-      <div style="padding:20px;margin-top:1px;height:1500px;">
-      <h1>Tuesday Workout for: {{ athletename }}</h1>
-    {{ workoutsheet | safe}}
+    <div style="padding:20px;margin-top:1px;height:1500px;">
+    <h1>Tuesday Workout for: {{ athletename }}</h1>
+    <table>
+        <tr>
+            {% for label in tueworkoutsheet[0][1:] %}
+                <th>{{ label }}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for split in tueworkoutsheet[1][1:] %}
+                <td>{{ split }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    {{ tueworkoutinfo }}
 </body>
 </html>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
-from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet
+from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet, get_workouts
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
 import pandas as pd
@@ -11,10 +11,7 @@ def get_current_week_dates():
     # Get the current date
     current_date = datetime.now()
 
-    # Find the first Monday of the current week
     monday_date = current_date - timedelta(days=current_date.weekday())
-
-    # Calculate the dates for Monday, Tuesday, and Friday of the current week
     tuesday_date = monday_date + timedelta(days=1)
     friday_date = monday_date + timedelta(days=4)
 
@@ -27,16 +24,21 @@ def get_current_week_dates():
 
     return formatted_monday, formatted_tuesday, formatted_friday
 
-data = scrape_mileage_sheet("Mileage.xlsx", get_current_week_dates()[0])
+# data = scrape_mileage_sheet(get_current_week_dates()[0])
+data = scrape_mileage_sheet('3-4')
 athletes = {}
 for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
-workoutdata = scrape_workout_sheet('Workouts.xlsx', get_current_week_dates()[1])
+workoutdata = [scrape_workout_sheet('3-5'), scrape_workout_sheet('3-8')]
+workouts = [get_workouts('3-5'), get_workouts('3-8')]
+# workoutdata = [scrape_workout_sheet(get_current_week_dates()[0]), scrape_workout_sheet(get_current_week_dates()[1])]
+# workouts = [get_workouts(get_current_week_dates()[0]), get_workouts(get_current_week_dates()[1])]
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
+
 
 def switchNameOrder(name):
     brokenName = name.split()
@@ -44,12 +46,13 @@ def switchNameOrder(name):
     lastName = brokenName[1]
     return lastName + ', ' + firstName
 
-def selectAthleteWO(name):
-    for row in workoutdata:
+def selectAthleteWO(name, workout):
+    for row in workout:
         for athlete in row:
             if athlete[0] == name:
+                # List comprehensions clean out the nans from the entries
                 return [x for x in [row[0][0]]+row[0][12:-1] if x != 'nan'], [x for x in [athlete[0]]+athlete[12:-1] if x != 'nan']
-    return False
+    return False # Athlete isn't found == False
 
 @app.route("/")
 def home():
@@ -57,7 +60,7 @@ def home():
 
 @app.route("/mileage")
 def mileage():
-    mileage = scrape_mileage_sheet('Mileage.xlsx', get_current_week_dates()[0])
+    mileage = scrape_mileage_sheet('3-4')
     return f"""<p>This page shows milage!</p>
     {mileage}
     """
@@ -73,7 +76,10 @@ def weekday(athleteName, dow):
         notes=schedule.get_notes(),
         total_miles=schedule.get_total_miles(),
         core=schedule.get_core(dow),
-            workoutsheet=selectAthleteWO(name)
+        tueworkoutsheet=selectAthleteWO(name, workoutdata[0]),
+        friworkoutsheet=selectAthleteWO(name, workoutdata[1]),
+        tueworkoutinfo=workouts[0],
+        friworkoutinfo=workouts[1]
         )
 
 @app.route("/search", methods=['POST'])
@@ -90,5 +96,8 @@ def show_athlete():
             notes=schedule.get_notes(),
             total_miles=schedule.get_total_miles(),
             core=schedule.get_core(DOW),
-            workoutsheet=selectAthleteWO(athlete)
+            tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
+            friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
+            tueworkoutinfo=workouts[0],
+            friworkoutinfo=workouts[1]
             )

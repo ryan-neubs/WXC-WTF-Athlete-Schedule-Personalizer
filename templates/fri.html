@@ -36,6 +36,9 @@
         background-color: grey;
         color: white;
         }
+    table, th, td {
+        border:1px solid black;
+    }
     </style>
 </head>
 <body>
@@ -50,6 +53,16 @@
       </div>
 
       <div style="padding:20px;margin-top:1px;height:1500px;">
-      <h1>Friday Workout for: {{ athletename }}</h1>
+    <h1>Friday Workout for: {{ athletename }}</h1>
+    <table>
+        <tr>
+            {% for label in friworkoutsheet[0][1:] %}
+                <th>{{ label }}</th>
+            {% endfor %}
+        </tr>
+    </table>
+    {{ workoutsheet }}
+    <br>
+    {{ friworkoutinfo }}
 </body>
 </html>
