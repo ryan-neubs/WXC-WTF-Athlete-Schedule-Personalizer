@@ -24,18 +24,18 @@ def get_current_week_dates():
 
     return formatted_monday, formatted_tuesday, formatted_friday
 
-# data = scrape_mileage_sheet(get_current_week_dates()[0])
-data = scrape_mileage_sheet('3-4')
+data = scrape_mileage_sheet(get_current_week_dates()[0])
+# data = scrape_mileage_sheet('3-4')
 athletes = {}
 for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
-workoutdata = [scrape_workout_sheet('3-5'), scrape_workout_sheet('3-8')]
-workouts = [get_workouts('3-5'), get_workouts('3-8')]
-# workoutdata = [scrape_workout_sheet(get_current_week_dates()[0]), scrape_workout_sheet(get_current_week_dates()[1])]
-# workouts = [get_workouts(get_current_week_dates()[0]), get_workouts(get_current_week_dates()[1])]
+# workoutdata = [scrape_workout_sheet('3-5'), scrape_workout_sheet('3-8')]
+# workouts = [get_workouts('3-5'), get_workouts('3-8')]
+workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet('3-8')]
+workouts = [get_workouts(get_current_week_dates()[1]), get_workouts('3-8')]
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 

@@ -1,5 +1,4 @@
 import pandas
-from workout import Workout
 class AthleteSchedule():
 
     CORE = {
