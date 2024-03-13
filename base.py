@@ -51,8 +51,18 @@ def selectAthleteWO(name, workout):
         for athlete in row:
             if athlete[0] == name:
                 # List comprehensions clean out the nans from the entries
-                return [x for x in [row[0][0]]+row[0][12:-1] if x != 'nan'], [x for x in [athlete[0]]+athlete[12:-1] if x != 'nan']
+                labels = [x for x in [row[0][0]]+row[0][12:-1] if x != 'nan']
+                data = [x for x in [athlete[0]]+athlete[12:-1] if x != 'nan']
+                return trimtable(labels, data)
     return False # Athlete isn't found == False
+
+def trimtable(labels, data):
+    if len(labels) > len(data):
+        return labels[:len(data)-1]+["Group"], data
+    elif len(labels) < len(data):
+        return labels, data[:len(labels)]
+    else:
+        return labels, data
 
 @app.route("/")
 def home():
