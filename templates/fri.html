@@ -61,6 +61,11 @@
                 <th>{{ label }}</th>
             {% endfor %}
         </tr>
+        <tr>
+            {% for split in friworkoutsheet[1][1:] %}
+                <td>{{ split }}</td>
+            {% endfor %}
+        </tr>
     </table>
     {{ workoutsheet }}
     <br>

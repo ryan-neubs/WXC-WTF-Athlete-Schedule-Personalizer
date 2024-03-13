@@ -57,12 +57,7 @@ def selectAthleteWO(name, workout):
     return False # Athlete isn't found == False
 
 def trimtable(labels, data):
-    if len(labels) > len(data):
-        return labels[:len(data)-1]+["Group"], data
-    elif len(labels) < len(data):
-        return labels, data[:len(labels)]
-    else:
-        return labels, data
+    return labels[:len(data)-1]+["Group"], data
 
 @app.route("/")
 def home():
