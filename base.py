@@ -34,11 +34,10 @@ for row in data:
 
 # workoutdata = [scrape_workout_sheet('3-5'), scrape_workout_sheet('3-8')]
 # workouts = [get_workouts('3-5'), get_workouts('3-8')]
-workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet('3-8')]
-workouts = [get_workouts(get_current_week_dates()[1]), get_workouts('3-8')]
+workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet('3-15.')]
+workouts = [dict(sorted(get_workouts(get_current_week_dates()[1]).items())), dict(sorted(get_workouts('3-15.').items()))]
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
-
 
 def switchNameOrder(name):
     brokenName = name.split()
@@ -65,7 +64,7 @@ def home():
 
 @app.route("/mileage")
 def mileage():
-    mileage = scrape_mileage_sheet('3-4')
+    mileage = scrape_mileage_sheet(get_current_week_dates()[0])
     return f"""<p>This page shows milage!</p>
     {mileage}
     """

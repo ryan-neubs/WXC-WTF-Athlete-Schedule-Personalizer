@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="../static/styles.css" rel="stylesheet">
         <style>
             body {margin:0;}
             /* Style the top navigation bar */
@@ -50,13 +51,13 @@
             <a style="float:right" href="/">Athlete Selection</a>
           </div>
 
-        <div style="padding:20px;margin-top:1px;height:1500px;">
+    <div style="padding:20px;margin-top:1px;height:1500px;">
         <h1>Monday Mileage for: {{ athletename }}</h1>
-        <p>Mileage: {{ mileage }}</p>
-        <p>FMS Group: {{ fms }}</p>
-        <p>Notes: {{ notes }}</p>
-        <p>Total Mileage: {{ total_miles }}</p>
-        <p>Today's Core: 
+            <p>Mileage: {{ mileage }}</p>
+            <p>FMS Group: {{ fms }}</p>
+            <p>Notes: {{ notes }}</p>
+            <p>Total Mileage: {{ total_miles }}</p>
+            <p>Today's Core: 
             <ul>
                 {% for thing in core %}
                   <li>{{ thing }}</li>
