@@ -8,6 +8,8 @@ h1 {
 .workoutinfo {
     margin-top: 10px;
     border: 2px solid black;
+    padding-left: 5px;
+    padding-top: 5px;
 }
 
 p, table {
