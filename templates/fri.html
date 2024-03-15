@@ -23,7 +23,7 @@
     <table>
         <tr>
             {% for label in friworkoutsheet[0][1:] %}
-                <th>{{ label }}</th>
+                <th class="labels">{{ label }}</th>
             {% endfor %}
         </tr>
         <tr>
@@ -32,8 +32,8 @@
             {% endfor %}
         </tr>
     </table>
-    {{ workoutsheet }}
-    <br>
-    {{ friworkoutinfo }}
+    <div class="workoutinfo">
+        {{ friworkoutinfo }}
+    </div>
 </body>
 </html>

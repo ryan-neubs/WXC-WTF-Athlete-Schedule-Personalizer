@@ -23,7 +23,7 @@
     <table>
         <tr>
             {% for label in tueworkoutsheet[0][1:] %}
-                <th>{{ label }}</th>
+                <th class="labels">{{ label }}</th>
             {% endfor %}
         </tr>
         <tr>
@@ -32,6 +32,8 @@
             {% endfor %}
         </tr>
     </table>
-    {{ tueworkoutinfo }}
+    <div class="workoutinfo">
+        {{ tueworkoutinfo }}
+    </div>
 </body>
 </html>

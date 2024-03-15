@@ -5,13 +5,23 @@ h1 {
     font-weight: 1000;
 }
 
-p {
-    font-family: 'Antipasto Pro', sans-serif;
+p, ul, table {
+    font-family: 'Calibri', sans-serif;
     font-weight: 400;
+}
+
+.labels {
+    font-family: 'Calibri', sans-serif;
+    font-weight: 800;
 }
 
 body {
     margin: 0;
+}
+
+.workoutinfo {
+    font-family: 'Calibri', sans-serif;
+    font-weight: 800;
 }
 
 /* Style the top navigation bar */
