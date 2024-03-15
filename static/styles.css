@@ -9,3 +9,45 @@ p {
     font-family: 'Antipasto Pro', sans-serif;
     font-weight: 400;
 }
+
+body {
+    margin: 0;
+}
+
+/* Style the top navigation bar */
+.topnav {
+    overflow: hidden;
+    background-color: orange;
+}
+
+/* Style the topnav links */
+.topnav a {
+    float: left;
+    border-right: 1px solid #bbb;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.topnav a:last-child {
+    border-right: none;
+}
+
+/* Change color on hover */
+.topnav a:hover:not(.active) {
+    background-color: coral;
+    /* color: black; */
+}
+
+.active {
+    background-color: grey;
+    color: white;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
