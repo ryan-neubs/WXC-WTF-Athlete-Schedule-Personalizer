@@ -24,12 +24,14 @@
         <p>FMS Group: {{ fms }}</p>
         <p>Notes: {{ notes }}</p>
         <p>Total Mileage: {{ total_miles }}</p>
-        <p>Today's Core: 
-            <ul>
+        <div class="core">
+            <p>Today's Core: 
+            <ol>
                 {% for thing in core %}
-                  <li>{{ thing }}</li>
+                <li>{{ thing }}</li>
                 {% endfor %}  
-            </ul>
-        </p>
+            </ol>
+            </p>
+        </div>
     </body>
 </html>

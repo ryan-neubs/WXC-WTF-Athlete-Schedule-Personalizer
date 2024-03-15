@@ -21,13 +21,15 @@
             <p>FMS Group: {{ fms }}</p>
             <p>Notes: {{ notes }}</p>
             <p>Total Mileage: {{ total_miles }}</p>
-            <p>Today's Core: 
-            <ul>
-                {% for thing in core %}
-                  <li>{{ thing }}</li>
-                {% endfor %}  
-            </ul>
-        </p>
+            <div class="core">
+                <p>Today's Core: 
+                <ol>
+                    {% for thing in core %}
+                    <li>{{ thing }}</li>
+                    {% endfor %}  
+                </ol>
+                </p>
+            </div>
     </div>
     </body>
 </html>

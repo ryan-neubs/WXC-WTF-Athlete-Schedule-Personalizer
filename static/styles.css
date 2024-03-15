@@ -5,10 +5,14 @@ h1 {
     font-weight: 1000;
 }
 
-p, ul, table {
+p, table {
     font-family: 'Calibri', sans-serif;
     font-weight: 400;
 }
+
+ol, li {
+    font-family: 'Calibri', sans-serif;
+  }
 
 .labels {
     font-family: 'Calibri', sans-serif;
@@ -24,21 +28,29 @@ body {
     font-weight: 800;
 }
 
+.core {
+    border: 2px solid black;
+    padding-left: 20px;
+}
+
 /* Style the top navigation bar */
 .topnav {
     overflow: hidden;
     background-color: orange;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
 }
 
 /* Style the topnav links */
 .topnav a {
     float: left;
-    border-right: 1px solid #bbb;
+    border-right: 1px solid black;
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    outline: 1px solid black;
 }
 
 .topnav a:last-child {
