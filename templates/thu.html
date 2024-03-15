@@ -18,21 +18,22 @@
             <a style="float:right" href="/">Athlete Selection</a>
         </div>
 
-        <div style="padding:20px;margin-top:1px;height:1500px;">
-        <h1>Thursday Mileage for: {{ athletename }}</h1>
-        <p>Mileage: {{ mileage }}</p>
-        <p>FMS Group: {{ fms }}</p>
-        <p>Notes: {{ notes }}</p>
-        <p>Total Mileage: {{ total_miles }}</p>
+        <div class="mileage">
+            <h1>Thursday Mileage for: {{ athletename }}</h1>
+            <p>Mileage: {{ mileage }}</p>
+            <p>FMS Group: {{ fms }}</p>
+            <p>Notes: {{ notes }}</p>
+            <p>Total Mileage: {{ total_miles }}</p>
 
-        <div class="core">
-            <p>Today's Core: 
-            <ol>
-                {% for thing in core %}
-                <li>{{ thing }}</li>
-                {% endfor %}  
-            </ol>
-            </p>
+            <div class="core">
+                <p>Today's Core: 
+                <ol>
+                    {% for thing in core %}
+                    <li>{{ thing }}</li>
+                    {% endfor %}  
+                </ol>
+                </p>
+            </div>
         </div>
     </body>
 </html>
