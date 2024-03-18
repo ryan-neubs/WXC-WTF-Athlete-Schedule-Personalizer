@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, url_for, redirect
-from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet, get_workouts
+from excelsheetscraper import scrape_mileage_sheet, scrape_workout_sheet, get_workouts, get_roster_list
 from AthleteSchedule import AthleteSchedule
 from datetime import datetime
 import pandas as pd
 from datetime import datetime, timedelta
 import os
+
+MEN, WOMEN = get_roster_list()
+TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
 app = Flask(__name__)
 
@@ -26,7 +29,8 @@ def get_current_week_dates():
     return formatted_monday, formatted_tuesday, formatted_friday
 
 workoutdata = [scrape_workout_sheet('3-12'), scrape_workout_sheet('3-15')]
-workouts = [dict(sorted(get_workouts('3-12').items())), dict(sorted(get_workouts('3-15').items()))]
+workoutsW = [get_workouts('3-12')[0], get_workouts('3-15')[0]]
+workoutsM = [get_workouts('3-12')[1], get_workouts('3-15')[1]]
 # workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet(get_current_week_dates()[2])]
 # workouts = [dict(sorted(get_workouts(get_current_week_dates()[1]).items())), dict(sorted(get_workouts(get_current_week_dates()[2]).items()))]
 
@@ -44,7 +48,10 @@ athleteNameList = []
 for athlete in athletes:
      athleteNameList.append(athlete)
 
-TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
+def get_MorF_workout(name, index):
+    if name in WOMEN:
+        return workoutsW[index]
+    return workoutsM[index]
 
 def switchNameOrder(name):
     brokenName = name.split()
@@ -87,8 +94,8 @@ def home():
                 core=schedule.get_core(DOW),
                 tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
                 friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
-                tueworkoutinfo=workouts[0],
-                friworkoutinfo=workouts[1]
+                tueworkoutinfo=get_MorF_workout(athlete, 0),
+                friworkoutinfo=get_MorF_workout(athlete, 1)
                 )
         
 @app.route("/<athleteName>/<int:dow>")
@@ -105,8 +112,8 @@ def weekday(athleteName, dow):
         core=schedule.get_core(dow),
         tueworkoutsheet=selectAthleteWO(name, workoutdata[0]),
         friworkoutsheet=selectAthleteWO(name, workoutdata[1]),
-        tueworkoutinfo=workouts[0],
-        friworkoutinfo=workouts[1]
+        tueworkoutinfo=get_MorF_workout(name, 0),
+        friworkoutinfo=get_MorF_workout(name, 1)
         )
 
 @app.route("/search", methods=['POST'])
@@ -128,6 +135,6 @@ def show_athlete():
                 core=schedule.get_core(DOW),
                 tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
                 friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
-                tueworkoutinfo=workouts[0],
-                friworkoutinfo=workouts[1]
+                tueworkoutinfo=get_MorF_workout(athlete, 0),
+                friworkoutinfo=get_MorF_workout(athlete, 1)
                 )

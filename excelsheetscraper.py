@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def scrape_mileage_sheet(week):
-    os.chdir("./MileageSheets/")
+    os.chdir("./Sheets/")
     mileagesheets = pd.ExcelFile("Mileage.xlsx")
     mileage = pd.read_excel(mileagesheets, week)
     os.chdir("..")
@@ -11,11 +11,11 @@ def scrape_mileage_sheet(week):
 
 def scrape_workout_sheet(week):
     subtables = []
-    os.chdir("./static/WorkoutSheets/")
+    os.chdir("./Sheets/")
     workoutsheets = pd.ExcelFile("Workouts.xlsx")
     workout = pd.read_excel(workoutsheets, week)
     workout = workout.astype(str)
-    os.chdir("../..")
+    os.chdir("..")
     data = workout.values.tolist()
     colnames = [row for row in workout]
     colname = colnames[0]
@@ -41,15 +41,31 @@ def scrape_workout_sheet(week):
     return subtables
 
 def get_workouts(week): # Issue - Workouts for women are being overwritten due to the keys being the same name
-    workouts = {}
-    os.chdir("./static/WorkoutSheets/")
+    workoutsW = {}
+    workoutsM = {}
+    os.chdir("./Sheets/")
     wosheet = pd.ExcelFile("Workouts.xlsx")
     wo = pd.read_excel(wosheet, week)
-    os.chdir("../..")
+    os.chdir("..")
+    # The first A group workout is put on the column label row causing it to be cut off. 
+    # The next two lines fix that
+    hiddenlabel, hiddendata = [row for row in wo.astype(str)][-1].split(':')
+    workoutsW[hiddenlabel] = hiddendata
     rows = wo.values.tolist()
     for row in rows:
         if type(row[-1]) == str:
-            workouts[row[-1].split(':')[0]] = row[-1].split(':')[1]
-    return workouts
+            if not row[-1].split(':')[0] in workoutsW:
+                workoutsW[row[-1].split(':')[0]] = row[-1].split(':')[1]
+            else:
+                workoutsM[row[-1].split(':')[0]] = row[-1].split(':')[1]
+    return workoutsW, workoutsM
+
+def get_roster_list():
+    os.chdir("./Sheets/")
+    rosters = pd.read_excel("Roster.xlsx")
+    os.chdir("..")
+    return rosters["Men"].tolist(), rosters["Women"].tolist()
+    
+    
 
     
