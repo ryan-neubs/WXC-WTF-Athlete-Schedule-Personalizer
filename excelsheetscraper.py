@@ -41,23 +41,29 @@ def scrape_workout_sheet(week):
     return subtables
 
 def get_workouts(week): # Issue - Workouts for women are being overwritten due to the keys being the same name
+    duplicatelocated = False # Added this variable. Once a duplicate is located, we are done finding the women's workouts. When duplicate is true then all following workouts are men's
     workoutsW = {}
     workoutsM = {}
+
     os.chdir("./Sheets/")
     wosheet = pd.ExcelFile("Workouts.xlsx")
     wo = pd.read_excel(wosheet, week)
     os.chdir("..")
+
     # The first A group workout is put on the column label row causing it to be cut off. 
     # The next two lines fix that
     hiddenlabel, hiddendata = [row for row in wo.astype(str)][-1].split(':')
     workoutsW[hiddenlabel] = hiddendata
     rows = wo.values.tolist()
+
     for row in rows:
         if type(row[-1]) == str:
-            if not row[-1].split(':')[0] in workoutsW:
+            if not row[-1].split(':')[0] in workoutsW and not duplicatelocated:
                 workoutsW[row[-1].split(':')[0]] = row[-1].split(':')[1]
             else:
+                duplicatelocated = True
                 workoutsM[row[-1].split(':')[0]] = row[-1].split(':')[1]
+
     return workoutsW, workoutsM
 
 def get_roster_list():

@@ -21,17 +21,17 @@
     <form action="/search" method="post">
         <input type="text" id="tags" name="name" placeholder="Athlete Not Found: Last, First" required> 
         
-        <script> 
-    $( function() { 
-        var availableTags = [ 
-            {% for language in athleteList %} 
-                "{{language}}", 
-            {% endfor %} 
-        ]; 
-        $( "#tags" ).autocomplete({ 
-        source: availableTags 
-        }); 
-    } ); 
+    <script> 
+        $( function() { 
+            var availableTags = [ 
+                {% for language in athleteList %} 
+                    "{{language}}", 
+                {% endfor %} 
+            ]; 
+            $( "#tags" ).autocomplete({ 
+            source: availableTags 
+            }); 
+        } ); 
     </script> 
         <button class="btn" type="submit"><i class="search">Search</i></button>
         

@@ -76,12 +76,12 @@ def trimtable(labels, data):
 def home():
     DOW = datetime.today().weekday()
     if request.method == "GET": 
-        return render_template("index1.html", athleteList = athleteNameList)
+        return render_template("index.html", athleteList = athleteNameList)
     
     if request.method == "POST":
         athlete = request.form['name']
         if athlete not in athleteNameList:
-            return render_template("index1Error.html", athleteList = athleteNameList)
+            return render_template("indexError.html", athleteList = athleteNameList)
         else:
             schedule = athletes[athlete]
             return render_template(
@@ -122,7 +122,7 @@ def show_athlete():
     if request.method == 'POST':
         athlete = request.form['name']
         if athlete not in athleteNameList:
-            return render_template("index1Error.html", athleteList = athleteNameList)
+            return render_template("indexError.html", athleteList = athleteNameList)
         else:
             schedule = athletes[athlete]
             return render_template(
