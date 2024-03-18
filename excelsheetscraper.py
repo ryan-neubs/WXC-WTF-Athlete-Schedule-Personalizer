@@ -25,7 +25,7 @@ def scrape_workout_sheet(week):
     data.insert(0, colnames)
     data[0][0] = colname
     for row in data:
-        if (row[0] == colname and row[12] == 'nan') or row[-2] == 'nan':
+        if (row[0] == colname and row[12] == 'nan'):
             data.remove(row)
     labellocs = []
     rowloc = 0
