@@ -32,6 +32,10 @@ for row in data:
         continue
     athletes[row[0]] = AthleteSchedule(row)
 
+athleteNameList = []
+for athlete in athletes:
+     athleteNameList.append(athlete)
+
 # workoutdata = [scrape_workout_sheet('3-5'), scrape_workout_sheet('3-8')]
 # workouts = [get_workouts('3-5'), get_workouts('3-8')]
 workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet('3-15.')]
@@ -58,9 +62,31 @@ def selectAthleteWO(name, workout):
 def trimtable(labels, data):
     return labels[:len(data)-1]+["Group"], data
 
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def home():
-    return render_template("index.html")
+    DOW = datetime.today().weekday()
+    if request.method == "GET": 
+        return render_template("index1.html", athleteList = athleteNameList)
+    
+    if request.method == "POST":
+        athlete = request.form['name']
+        if athlete not in athleteNameList:
+            return render_template("index1Error.html", athleteList = athleteNameList)
+        else:
+            schedule = athletes[athlete]
+            return render_template(
+                TEMPLATES[DOW], 
+                athletename=schedule.get_name(),
+                mileage=schedule.get_days_mileage(DOW),
+                fms=schedule.get_fms(),
+                notes=schedule.get_notes(),
+                total_miles=schedule.get_total_miles(),
+                core=schedule.get_core(DOW),
+                tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
+                friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
+                tueworkoutinfo=workouts[0],
+                friworkoutinfo=workouts[1]
+                )
 
 @app.route("/mileage")
 def mileage():
@@ -91,17 +117,20 @@ def show_athlete():
     DOW = datetime.today().weekday()
     if request.method == 'POST':
         athlete = request.form['name']
-        schedule = athletes[athlete]
-        return render_template(
-            TEMPLATES[DOW], 
-            athletename=schedule.get_name(),
-            mileage=schedule.get_days_mileage(DOW),
-            fms=schedule.get_fms(),
-            notes=schedule.get_notes(),
-            total_miles=schedule.get_total_miles(),
-            core=schedule.get_core(DOW),
-            tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
-            friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
-            tueworkoutinfo=workouts[0],
-            friworkoutinfo=workouts[1]
-            )
+        if athlete not in athleteNameList:
+            return render_template("index1Error.html", athleteList = athleteNameList)
+        else:
+            schedule = athletes[athlete]
+            return render_template(
+                TEMPLATES[DOW], 
+                athletename=schedule.get_name(),
+                mileage=schedule.get_days_mileage(DOW),
+                fms=schedule.get_fms(),
+                notes=schedule.get_notes(),
+                total_miles=schedule.get_total_miles(),
+                core=schedule.get_core(DOW),
+                tueworkoutsheet=selectAthleteWO(athlete, workoutdata[0]),
+                friworkoutsheet=selectAthleteWO(athlete, workoutdata[1]),
+                tueworkoutinfo=workouts[0],
+                friworkoutinfo=workouts[1]
+                )
