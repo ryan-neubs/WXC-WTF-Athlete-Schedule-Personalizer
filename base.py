@@ -4,6 +4,7 @@ from AthleteSchedule import AthleteSchedule
 from datetime import datetime
 import pandas as pd
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
 
@@ -24,7 +25,15 @@ def get_current_week_dates():
 
     return formatted_monday, formatted_tuesday, formatted_friday
 
-data = scrape_mileage_sheet(get_current_week_dates()[0])
+workoutdata = [scrape_workout_sheet('3-12'), scrape_workout_sheet('3-15')]
+workouts = [dict(sorted(get_workouts('3-12').items())), dict(sorted(get_workouts('3-15').items()))]
+# workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet(get_current_week_dates()[2])]
+# workouts = [dict(sorted(get_workouts(get_current_week_dates()[1]).items())), dict(sorted(get_workouts(get_current_week_dates()[2]).items()))]
+
+# data = scrape_mileage_sheet(get_current_week_dates()[0])
+data = scrape_mileage_sheet('3-11')
+if data == False:
+    raise FileNotFoundError
 athletes = {}
 for row in data:
     if row[1] == 'FMS' or type(row[2]) == float:
@@ -34,9 +43,6 @@ for row in data:
 athleteNameList = []
 for athlete in athletes:
      athleteNameList.append(athlete)
-
-workoutdata = [scrape_workout_sheet(get_current_week_dates()[1]), scrape_workout_sheet('3-15.')]
-workouts = [dict(sorted(get_workouts(get_current_week_dates()[1]).items())), dict(sorted(get_workouts('3-15.').items()))]
 
 TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.html', 'sun.html']
 
@@ -84,13 +90,7 @@ def home():
                 tueworkoutinfo=workouts[0],
                 friworkoutinfo=workouts[1]
                 )
-
-@app.route("/mileage")
-def mileage():
-    mileage = scrape_mileage_sheet(get_current_week_dates()[0])
-    return f"""<p>This page shows milage!</p>
-    {mileage}
-    """
+        
 @app.route("/<athleteName>/<int:dow>")
 def weekday(athleteName, dow):
     name = switchNameOrder(athleteName)

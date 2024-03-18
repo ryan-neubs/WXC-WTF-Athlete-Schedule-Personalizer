@@ -40,7 +40,7 @@ def scrape_workout_sheet(week):
             subtables.append(data[labellocs[index]:labellocs[index+1]])
     return subtables
 
-def get_workouts(week):
+def get_workouts(week): # Issue - Workouts for women are being overwritten due to the keys being the same name
     workouts = {}
     os.chdir("./static/WorkoutSheets/")
     wosheet = pd.ExcelFile("Workouts.xlsx")
@@ -51,6 +51,5 @@ def get_workouts(week):
         if type(row[-1]) == str:
             workouts[row[-1].split(':')[0]] = row[-1].split(':')[1]
     return workouts
-
 
     
