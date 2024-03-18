@@ -11,6 +11,14 @@ TEMPLATES = ['mon.html', 'tue.html', 'wed.html', 'thu.html', 'fri.html', 'sat.ht
 
 app = Flask(__name__)
 
+def clean_time_format(time_list):
+    cleaned_times = []
+    for time_str in time_list:
+        print(time_str)
+        time_obj = datetime.strptime(time_str, "%H:%M:%S.%f")
+        cleaned_times.append(time_obj.strftime("%M:%S"))
+    return cleaned_times
+
 def get_current_week_dates():
     # Get the current date
     current_date = datetime.now()
@@ -66,6 +74,7 @@ def selectAthleteWO(name, workout):
                 # List comprehensions clean out the nans from the entries
                 labels = [x for x in [row[0][0]]+row[0][12:-1] if x != 'nan']
                 data = [x for x in [athlete[0]]+athlete[12:-1] if x != 'nan']
+                data = [data[1]] + clean_time_format(data[1:-1])+[data[-1]]
                 return trimtable(labels, data)
     return False # Athlete isn't found == False
 
